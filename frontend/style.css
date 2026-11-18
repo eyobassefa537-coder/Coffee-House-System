@@ -1,0 +1,420 @@
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f7f2eb;
+    color: #35251d;
+    line-height: 1.6;
+}
+
+
+.header {
+    background-color: #4b2e20;
+    color: white;
+    padding: 25px 20px;
+}
+
+.brand {
+    max-width: 1100px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.logo {
+    font-size: 55px;
+}
+
+.brand h1 {
+    margin: 0;
+    font-size: 30px;
+}
+
+.brand p {
+    margin: 4px 0;
+}
+
+
+.navigation {
+    background-color: #70462d;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.navigation a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.navigation a:hover {
+    color: #ffd59b;
+}
+
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 25px 20px;
+}
+
+section {
+    margin-bottom: 30px;
+}
+
+.welcome {
+    background-color: #e9d6bd;
+    padding: 25px;
+    border-radius: 12px;
+    border-left: 6px solid #80512f;
+}
+
+.welcome h2 {
+    margin-top: 0;
+    color: #4b2e20;
+}
+
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.product-card {
+    background-color: white;
+    padding: 22px;
+    border-radius: 12px;
+    border: 1px solid #e4d6c8;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: transform 0.2s;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+}
+
+.product-icon {
+    font-size: 45px;
+}
+
+.product-card h3 {
+    margin: 10px 0 5px;
+}
+
+.product-card p {
+    margin: 5px 0 15px;
+}
+
+.price {
+    color: #79502f;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.product-card button {
+    margin-top: auto;
+}
+
+
+.panel {
+    background-color: white;
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid #e4d6c8;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.panel h2 {
+    margin-top: 0;
+    color: #563621;
+}
+
+
+label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+input {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    border: 1px solid #cbb9a7;
+    border-radius: 7px;
+    background-color: #fffdf9;
+    font-size: 16px;
+}
+
+input:focus {
+    outline: 2px solid #98663f;
+    border-color: #98663f;
+}
+
+
+button {
+    padding: 11px 16px;
+    border: none;
+    border-radius: 7px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.primary,
+.product-card button {
+    background-color: #674128;
+    color: white;
+}
+
+.primary:hover,
+.product-card button:hover {
+    background-color: #422819;
+}
+
+.secondary {
+    background-color: #e9dfd4;
+    color: #35251d;
+}
+
+.secondary:hover {
+    background-color: #d9c8b7;
+}
+
+.remove-btn {
+    background-color: #f7dddd;
+    color: #8b2525;
+}
+
+.remove-btn:hover {
+    background-color: #efc4c4;
+}
+
+button:focus-visible,
+a:focus-visible {
+    outline: 3px solid #c68c4c;
+    outline-offset: 3px;
+}
+
+
+.cart-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 0;
+    border-bottom: 1px solid #eadfd4;
+}
+
+.cart-row p {
+    margin: 3px 0;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.quantity-controls button {
+    padding: 8px 12px;
+}
+
+.empty {
+    color: #827469;
+    font-style: italic;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 15px 0;
+    margin-top: 10px;
+    border-top: 1px solid #dfd3c8;
+    font-size: 18px;
+}
+
+#payment-message {
+    font-weight: bold;
+}
+
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+
+#receipt-section {
+    border-top: 5px solid #674128;
+}
+
+#receipt h2 {
+    text-align: center;
+}
+
+#receipt > p {
+    overflow-wrap: anywhere;
+}
+
+
+.sales-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 18px;
+}
+
+.sales-card {
+    padding: 22px;
+    background-color: #f0e4d6;
+    border-radius: 10px;
+    border-left: 5px solid #79502f;
+}
+
+.sales-card p {
+    margin-top: 0;
+}
+
+.sales-card h3 {
+    margin-bottom: 0;
+    color: #563621;
+    overflow-wrap: anywhere;
+}
+
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+th,
+td {
+    padding: 13px;
+    text-align: left;
+    border-bottom: 1px solid #e5d9cd;
+}
+
+th {
+    background-color: #eee1d2;
+    color: #4b2e20;
+}
+
+tbody tr:hover {
+    background-color: #faf5ef;
+}
+
+
+footer {
+    background-color: #4b2e20;
+    color: white;
+    text-align: center;
+    padding: 22px;
+    margin-top: 30px;
+}
+
+footer p {
+    margin: 5px;
+}
+
+
+@media (max-width: 600px) {
+    .header {
+        padding: 20px 12px;
+    }
+
+    .brand {
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .logo {
+        font-size: 38px;
+    }
+
+    .brand h1 {
+        font-size: 23px;
+    }
+
+    .navigation {
+        gap: 15px;
+    }
+
+    .container {
+        padding: 18px 12px;
+    }
+
+    .welcome,
+    .panel {
+        padding: 18px;
+    }
+
+    .cart-row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .button-group button {
+        flex: 1;
+    }
+
+    th,
+    td {
+        padding: 9px;
+    }
+}
+
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+
+    #receipt-section,
+    #receipt-section * {
+        visibility: visible;
+    }
+
+    #receipt-section {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        border: none;
+        box-shadow: none;
+    }
+
+    #print-btn {
+        display: none;
+    }
+}
+

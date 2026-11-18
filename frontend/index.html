@@ -1,0 +1,144 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jimma Coffee House</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="brand">
+            <span class="logo">☕</span>
+            <div>
+                <h1>Jimma Coffee House</h1>
+                <p>Fresh Ethiopian Coffee, Served with Love</p>
+                <p> Jimma Town, Oromia, Ethiopia</p>
+            </div>
+        </div>
+    </header>
+
+    <nav class="navigation">
+        <a href="#menu">Menu</a>
+        <a href="#orders">Current Order</a>
+        <a href="#sales">Daily Sales</a>
+    </nav>
+
+    <main class="container">
+
+        <section class="welcome">
+            <h2>Welcome to Jimma Coffee House!</h2>
+            <p>Enjoy the taste of Ethiopian coffee.</p>
+            <p id="current-date"></p>
+        </section>
+
+        <section id="menu">
+            <h2>☕ Our Menu</h2>
+            <p>Select a product to add it to the customer's order.</p>
+
+            <div class="menu-grid" id="menu-grid"></div>
+        </section>
+
+        <section id="orders" class="panel">
+            <h2>🛒 Customer Order</h2>
+
+            <label for="customer-name">Customer name (optional)</label>
+            <input
+                type="text"
+                id="customer-name"
+                placeholder="Enter customer name"
+            >
+
+            <div id="cart-items">
+                <p class="empty">No items in the order yet.</p>
+            </div>
+
+            <div class="total-row">
+                <strong>Total:</strong>
+                <strong><span id="order-total">0.00</span> Birr</strong>
+            </div>
+
+            <label for="payment">Amount paid (Birr)</label>
+            <input
+                type="number"
+                id="payment"
+                min="0"
+                step="0.01"
+                placeholder="Enter amount received"
+            >
+
+            <div class="total-row">
+                <strong>Change:</strong>
+                <strong><span id="change">0.00</span> Birr</strong>
+            </div>
+
+            <p id="payment-message" aria-live="polite"></p>
+
+            <div class="button-group">
+                <button id="complete-btn" class="primary">
+                    Complete Sale
+                </button>
+
+                <button id="clear-btn" class="secondary">
+                    Clear Order
+                </button>
+            </div>
+        </section>
+
+        <section id="receipt-section" class="panel" hidden>
+            <div id="receipt"></div>
+            <button id="print-btn" class="primary">
+                Print Receipt
+            </button>
+        </section>
+
+        <section id="sales" class="panel">
+            <h2>📊 Daily Sales Report</h2>
+
+            <div class="sales-grid">
+                <div class="sales-card">
+                    <p>Completed Orders</p>
+                    <h3 id="sales-count">0</h3>
+                </div>
+
+                <div class="sales-card">
+                    <p>Total Sales</p>
+                    <h3><span id="sales-total">0.00</span> Birr</h3>
+                </div>
+            </div>
+
+            <h3>Recent Sales</h3>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Receipt</th>
+                            <th>Customer</th>
+                            <th>Time</th>
+                            <th>Total (Birr)</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="sales-history">
+                        <tr>
+                            <td colspan="4">No sales recorded yet.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Jimma Coffee House | Jimma Town, Ethiopia</p>
+        <p> ©2026 Eyob Assefa.ALL RIGHTS RESERVED</p>
+    </footer>
+
+   <script src="script.js"></script>
+</body>
+</html>
+
