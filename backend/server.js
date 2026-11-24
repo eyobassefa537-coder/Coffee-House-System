@@ -1,142 +1,355 @@
 const express = require('express');
 const path = require('path');
+const db = require('./config/db');
 
 const app = express();
 const PORT = 5000;
 
+// Middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-
-let products = [
-    { id: 1, name: 'Ethiopian Coffee', price: 30 },
-    { id: 2, name: 'Macchiato', price: 60 },
-    { id: 3, name: 'Tea', price: 20 },
-    { id: 4, name: 'Espresso', price: 30 },
-    { id: 5, name: 'Cappuccino', price: 35 },
-    { id: 6, name: 'Fresh Juice', price: 120 },
-    { id: 7, name: 'Bread', price: 25 },
-    { id: 8, name: 'Cake', price: 100 }
-];
-
-let orders = [];
-
-
+// Serve frontend files
 app.use(express.static(path.join(__dirname, '../frontend')));
 
-// Homepage
+// Home page
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
-// Get products
-app.get('/api/products', (req, res) => {
-    res.json(products);
-});
+// Allowed database tables
+const tables = [
+    'products',
+    'categories',
+    'customers',
+    'users',
+    'orders',
+    'order_items',
+    'payments'
+];
 
-// Add product
-app.post('/api/products', (req, res) => {
-    const { name, price } = req.body;
+// Test database connection
+app.get('/api/test-db', async (req, res) => {
+    try {
+        const [result] = await db.query('SELECT 1 AS connected');
 
-    if (!name || !Number.isFinite(Number(price)) || Number(price) <= 0) {
-        return res.status(400).json({ message: 'Invalid product' });
-    }
+        res.json({
+            success: true,
+            message: 'MySQL connected successfully!',
+            data: result
+        });
 
-    const product = {
-        id: Date.now(),
-        name,
-        price: Number(price)
-    };
-
-    products.push(product);
-    res.status(201).json(product);
-});
-
-// Update product
-app.put('/api/products/:id', (req, res) => {
-    const product = products.find(p => p.id === Number(req.params.id));
-
-    if (!product) {
-        return res.status(404).json({ message: 'Product not found' });
-    }
-
-    const { name, price } = req.body;
-
-    if (!name || !Number.isFinite(Number(price)) || Number(price) <= 0) {
-        return res.status(400).json({ message: 'Invalid product' });
-    }
-
-    product.name = name;
-    product.price = Number(price);
-
-    res.json(product);
-});
-
-// Delete product
-app.delete('/api/products/:id', (req, res) => {
-    const id = Number(req.params.id);
-    const exists = products.some(p => p.id === id);
-
-    if (!exists) {
-        return res.status(404).json({ message: 'Product not found' });
-    }
-
-    products = products.filter(p => p.id !== id);
-    res.json({ message: 'Product deleted' });
-});
-
-// Create order
-app.post('/api/orders', (req, res) => {
-    const { customerName, items } = req.body;
-
-    if (!customerName || !Array.isArray(items) || items.length === 0) {
-        return res.status(400).json({ message: 'Invalid order' });
-    }
-
-    let total = 0;
-    const orderItems = [];
-
-    for (const item of items) {
-        const product = products.find(p => p.id === Number(item.productId));
-        const quantity = Number(item.quantity);
-
-        if (!product || !Number.isInteger(quantity) || quantity <= 0) {
-            return res.status(400).json({ message: 'Invalid order item' });
-        }
-
-        total += product.price * quantity;
-
-        orderItems.push({
-            productId: product.id,
-            name: product.name,
-            price: product.price,
-            quantity
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
         });
     }
-
-    const order = {
-        id: Date.now(),
-        customerName,
-        items: orderItems,
-        total,
-        date: new Date().toISOString()
-    };
-
-    orders.push(order);
-    res.status(201).json(order);
 });
 
-// Get orders
-app.get('/api/orders', (req, res) => {
-    res.json(orders);
+// GET all records
+app.get('/api/:table', async (req, res) => {
+    try {
+        const { table } = req.params;
+
+        if (!tables.includes(table)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid table name'
+            });
+        }
+
+        const [rows] = await db.query(`SELECT * FROM ${table}`);
+
+        // Hide password information from API responses
+        let safeRows = rows;
+
+        if (table === 'users') {
+            safeRows = rows.map(
+                ({ password, password_hash, ...user }) => user
+            );
+        }
+
+        res.json({
+            success: true,
+            count: safeRows.length,
+            data: safeRows
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
 });
 
-// Sales summary
+// GET record by ID
+app.get('/api/:table/:id', async (req, res) => {
+    try {
+        const { table, id } = req.params;
+
+        if (!tables.includes(table)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid table name'
+            });
+        }
+
+        const [columns] = await db.query(`SHOW COLUMNS FROM ${table}`);
+
+        const primaryKey = columns.find(
+            column => column.Key === 'PRI'
+        );
+
+        if (!primaryKey) {
+            return res.status(400).json({
+                success: false,
+                message: 'Primary key not found'
+            });
+        }
+
+        const [rows] = await db.query(
+            `SELECT * FROM ${table} WHERE ${primaryKey.Field} = ?`,
+            [id]
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Record not found'
+            });
+        }
+
+        let record = rows[0];
+
+        if (table === 'users') {
+            const {
+                password,
+                password_hash,
+                ...safeUser
+            } = record;
+
+            record = safeUser;
+        }
+
+        res.json({
+            success: true,
+            data: record
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+});
+
+// POST new record
+app.post('/api/:table', async (req, res) => {
+    try {
+        const { table } = req.params;
+        const data = req.body;
+
+        if (!tables.includes(table)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid table name'
+            });
+        }
+
+        const [columns] = await db.query(`SHOW COLUMNS FROM ${table}`);
+
+        const allowedColumns = columns
+            .map(column => column.Field)
+            .filter(column => column !== columns.find(c => c.Key === 'PRI')?.Field);
+
+        const fields = Object.keys(data).filter(
+            field => allowedColumns.includes(field)
+        );
+
+        if (fields.length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'No valid fields provided'
+            });
+        }
+
+        const values = fields.map(field => data[field]);
+        const placeholders = fields.map(() => '?').join(', ');
+
+        const sql = `
+            INSERT INTO ${table} (${fields.join(', ')})
+            VALUES (${placeholders})
+        `;
+
+        const [result] = await db.query(sql, values);
+
+        res.status(201).json({
+            success: true,
+            message: 'Record created successfully',
+            insertId: result.insertId
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+});
+
+// PUT update record
+app.put('/api/:table/:id', async (req, res) => {
+    try {
+        const { table, id } = req.params;
+        const data = req.body;
+
+        if (!tables.includes(table)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid table name'
+            });
+        }
+
+        const [columns] = await db.query(`SHOW COLUMNS FROM ${table}`);
+
+        const primaryKey = columns.find(
+            column => column.Key === 'PRI'
+        );
+
+        if (!primaryKey) {
+            return res.status(400).json({
+                success: false,
+                message: 'Primary key not found'
+            });
+        }
+
+        const allowedColumns = columns
+            .map(column => column.Field)
+            .filter(field => field !== primaryKey.Field);
+
+        const fields = Object.keys(data).filter(
+            field => allowedColumns.includes(field)
+        );
+
+        if (fields.length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'No valid fields provided'
+            });
+        }
+
+        const updates = fields
+            .map(field => `${field} = ?`)
+            .join(', ');
+
+        const values = fields.map(field => data[field]);
+        values.push(id);
+
+        const sql = `
+            UPDATE ${table}
+            SET ${updates}
+            WHERE ${primaryKey.Field} = ?
+        `;
+
+        const [result] = await db.query(sql, values);
+
+        res.json({
+            success: true,
+            message: 'Record updated successfully',
+            affectedRows: result.affectedRows
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+});
+
+// DELETE record
+app.delete('/api/:table/:id', async (req, res) => {
+    try {
+        const { table, id } = req.params;
+
+        if (!tables.includes(table)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid table name'
+            });
+        }
+
+        const [columns] = await db.query(`SHOW COLUMNS FROM ${table}`);
+
+        const primaryKey = columns.find(
+            column => column.Key === 'PRI'
+        );
+
+        if (!primaryKey) {
+            return res.status(400).json({
+                success: false,
+                message: 'Primary key not found'
+            });
+        }
+
+        const [result] = await db.query(
+            `DELETE FROM ${table} WHERE ${primaryKey.Field} = ?`,
+            [id]
+        );
+
+        res.json({
+            success: true,
+            message: 'Record deleted successfully',
+            affectedRows: result.affectedRows
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+});
+
+// Sales API (to be implemented)
 app.get('/api/sales', (req, res) => {
-    const totalSales = orders.reduce((sum, order) => sum + order.total, 0);
+    res.status(501).json({
+        success: false,
+        message: 'Sales API is not implemented yet'
+    });
+});
 
-    res.json({
-        totalOrders: orders.length,
-        totalSales
+
+// GET PRODUCTS FROM MYSQL
+app.get('/api/products', (req, res) => {
+    const sql = 'SELECT * FROM products WHERE is_available = 1';
+
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({
+                success: false,
+                message: 'Failed to retrieve products'
+            });
+        }
+
+        res.json({
+            success: true,
+            count: results.length,
+            data: results
+        });
+    });
+});
+
+
+// 404 handler
+app.use((req, res) => {
+    res.status(404).json({
+        success: false,
+        message: 'API endpoint not found'
     });
 });
 

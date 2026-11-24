@@ -1,144 +1,641 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coffee-House-System</title>
-  <link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="description"
+    content="BEANCRAFT COFFEE HOUSE - Professional Coffee House Management System">
+
+<meta name="theme-color" content="#17130f">
+
+<title>BEANCRAFT COFFEE HOUSE | Management System</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+    rel="stylesheet">
+
+<!-- Icons -->
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<!-- Main CSS -->
+<link rel="stylesheet" href="style.css">
+
 </head>
+    
 <body>
 
-    <header class="header">
-        <div class="brand">
-            <span class="logo">☕</span>
-            <div>
-                <h1>Jimma Coffee House</h1>
-                <p>Fresh Ethiopian Coffee, Served with Love</p>
-                <p> Jimma Town, Oromia, Ethiopia</p>
-            </div>
-        </div>
-    </header>
+    <div class="dashboard-container">
 
-    <nav class="navigation">
-        <a href="#menu">Menu</a>
-        <a href="#orders">Current Order</a>
-        <a href="#sales">Daily Sales</a>
-    </nav>
+        <!-- SIDEBAR -->
 
-    <main class="container">
+        <aside class="sidebar" id="sidebar">
 
-        <section class="welcome">
-            <h2>Welcome to Jimma Coffee House!</h2>
-            <p>Enjoy the taste of Ethiopian coffee.</p>
-            <p id="current-date"></p>
-        </section>
+            <div class="brand">
 
-        <section id="menu">
-            <h2>☕ Our Menu</h2>
-            <p>Select a product to add it to the customer's order.</p>
-
-            <div class="menu-grid" id="menu-grid"></div>
-        </section>
-
-        <section id="orders" class="panel">
-            <h2>🛒 Customer Order</h2>
-
-            <label for="customer-name">Customer name (optional)</label>
-            <input
-                type="text"
-                id="customer-name"
-                placeholder="Enter customer name"
-            >
-
-            <div id="cart-items">
-                <p class="empty">No items in the order yet.</p>
-            </div>
-
-            <div class="total-row">
-                <strong>Total:</strong>
-                <strong><span id="order-total">0.00</span> Birr</strong>
-            </div>
-
-            <label for="payment">Amount paid (Birr)</label>
-            <input
-                type="number"
-                id="payment"
-                min="0"
-                step="0.01"
-                placeholder="Enter amount received"
-            >
-
-            <div class="total-row">
-                <strong>Change:</strong>
-                <strong><span id="change">0.00</span> Birr</strong>
-            </div>
-
-            <p id="payment-message" aria-live="polite"></p>
-
-            <div class="button-group">
-                <button id="complete-btn" class="primary">
-                    Complete Sale
-                </button>
-
-                <button id="clear-btn" class="secondary">
-                    Clear Order
-                </button>
-            </div>
-        </section>
-
-        <section id="receipt-section" class="panel" hidden>
-            <div id="receipt"></div>
-            <button id="print-btn" class="primary">
-                Print Receipt
-            </button>
-        </section>
-
-        <section id="sales" class="panel">
-            <h2>📊 Daily Sales Report</h2>
-
-            <div class="sales-grid">
-                <div class="sales-card">
-                    <p>Completed Orders</p>
-                    <h3 id="sales-count">0</h3>
+                <div class="brand-icon">
+                    <i class="fa-solid fa-mug-hot"></i>
                 </div>
 
-                <div class="sales-card">
-                    <p>Total Sales</p>
-                    <h3><span id="sales-total">0.00</span> Birr</h3>
+                <div class="brand-info">
+                    <h2>BEANCRAFT</h2>
+                    <span>COFFEE HOUSE</span>
                 </div>
+
             </div>
 
-            <h3>Recent Sales</h3>
 
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Receipt</th>
-                            <th>Customer</th>
-                            <th>Time</th>
-                            <th>Total (Birr)</th>
-                        </tr>
-                    </thead>
+            <!-- NAVIGATION -->
 
-                    <tbody id="sales-history">
-                        <tr>
-                            <td colspan="4">No sales recorded yet.</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <nav class="sidebar-navigation">
+
+                <p class="nav-heading">MAIN MENU</p>
+
+                <a href="#dashboard" class="nav-link active">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="#orders" class="nav-link">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span>Orders</span>
+                    <span class="nav-badge">04</span>
+                </a>
+
+                <a href="#products" class="nav-link">
+                    <i class="fa-solid fa-mug-saucer"></i>
+                    <span>Products</span>
+                </a>
+
+                <a href="#categories" class="nav-link">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <span>Categories</span>
+                </a>
+
+                <a href="#customers" class="nav-link">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Customers</span>
+                </a>
+
+
+                <p class="nav-heading">MANAGEMENT</p>
+
+                <a href="#inventory" class="nav-link">
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                    <span>Inventory</span>
+                </a>
+
+                <a href="#payments" class="nav-link">
+                    <i class="fa-solid fa-credit-card"></i>
+                    <span>Payments</span>
+                </a>
+
+                <a href="#reports" class="nav-link">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Reports</span>
+                </a>
+
+
+                <p class="nav-heading">SYSTEM</p>
+
+                <a href="#staff" class="nav-link">
+                    <i class="fa-solid fa-user-group"></i>
+                    <span>Staff Management</span>
+                </a>
+
+                <a href="#security" class="nav-link">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Security</span>
+                </a>
+
+                <a href="#settings" class="nav-link">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Settings</span>
+                </a>
+
+            </nav>
+
+
+            <!-- SIDEBAR FOOTER -->
+
+            <div class="sidebar-footer">
+
+                <div class="sidebar-coffee">
+                    <i class="fa-solid fa-seedling"></i>
+
+                    <div>
+                        <h4>Premium Coffee</h4>
+                        <p>Crafted with Excellence</p>
+                    </div>
+                </div>
+
+                <button class="logout-button" id="logoutButton">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Logout</span>
+                </button>
+
             </div>
-        </section>
 
-    </main>
+        </aside>
 
-    <footer>
-        <p>Jimma Coffee House | Jimma Town, Ethiopia</p>
-        <p> ©2026 Eyob Assefa.ALL RIGHTS RESERVED</p>
-    </footer>
 
-   <script src="script.js"></script>
+        <!-- MAIN CONTENT -->
+
+        <main class="main-content">
+
+            <!-- TOP HEADER -->
+
+            <header class="top-header">
+
+                <div class="header-left">
+
+                    <button class="menu-toggle" id="menuToggle"
+                        aria-label="Toggle navigation">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+
+                    <div class="page-heading">
+                        <h1>Dashboard</h1>
+                        <p>Welcome back! Here's what's happening today.</p>
+                    </div>
+
+                </div>
+
+
+                <div class="header-right">
+
+                    <div class="header-date">
+                        <i class="fa-regular fa-calendar"></i>
+                        <span id="currentDate">Today</span>
+                    </div>
+
+                    <button class="notification-button"
+                        aria-label="Notifications">
+
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="notification-dot"></span>
+
+                    </button>
+
+
+                    <div class="admin-profile">
+
+                        <div class="admin-avatar">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+
+                        <div class="admin-details">
+                            <h4 id="adminName">Administrator</h4>
+                            <span>System Admin</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <!-- DASHBOARD CONTENT -->
+
+            <section class="dashboard-content" id="dashboard">
+
+                <!-- WELCOME BANNER -->
+
+                <div class="welcome-banner">
+
+                    <div class="welcome-text">
+
+                        <span class="welcome-label">
+                            BEANCRAFT COFFEE HOUSE
+                        </span>
+
+                        <h2>Every Cup Tells a Story.</h2>
+
+                        <p>
+                            Manage your coffee business, monitor sales
+                            and deliver exceptional customer experiences.
+                        </p>
+
+                        <a href="#orders" class="primary-button">
+                            <i class="fa-solid fa-plus"></i>
+                            Manage Orders
+                        </a>
+
+                    </div>
+
+                    <div class="welcome-icon">
+                        <i class="fa-solid fa-mug-hot"></i>
+                    </div>
+
+                </div>
+
+
+                <!-- STATISTICS -->
+
+                <div class="section-heading">
+
+                    <div>
+                        <h2>Business Overview</h2>
+                        <p>Monitor your coffee house performance.</p>
+                    </div>
+
+                    <select id="statisticsFilter"
+                        aria-label="Statistics time period">
+
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="statistics-grid">
+
+
+                    <!-- TOTAL SALES -->
+
+                    <article class="stat-card">
+
+                        <div class="stat-top">
+
+                            <div class="stat-icon sales-icon">
+                                <i class="fa-solid fa-wallet"></i>
+                            </div>
+
+                            <span class="stat-label">TOTAL SALES</span>
+
+                        </div>
+
+                        <h2 id="totalSales">ETB 0.00</h2>
+
+                        <p>
+                            <i class="fa-solid fa-chart-line"></i>
+                            Revenue overview
+                        </p>
+
+                    </article>
+
+
+                    <!-- TOTAL ORDERS -->
+
+                    <article class="stat-card">
+
+                        <div class="stat-top">
+
+                            <div class="stat-icon orders-icon">
+                                <i class="fa-solid fa-bag-shopping"></i>
+                            </div>
+
+                            <span class="stat-label">TOTAL ORDERS</span>
+
+                        </div>
+
+                        <h2 id="totalOrders">0</h2>
+
+                        <p>
+                            Orders received
+                        </p>
+
+                    </article>
+
+
+                    <!-- CUSTOMERS -->
+
+                    <article class="stat-card">
+
+                        <div class="stat-top">
+
+                            <div class="stat-icon customers-icon">
+                                <i class="fa-solid fa-users"></i>
+                            </div>
+
+                            <span class="stat-label">CUSTOMERS</span>
+
+                        </div>
+
+                        <h2 id="totalCustomers">0</h2>
+
+                        <p>
+                            Registered customers
+                        </p>
+
+                    </article>
+
+
+                    <!-- PRODUCTS -->
+
+                    <article class="stat-card">
+
+                        <div class="stat-top">
+
+                            <div class="stat-icon products-icon">
+                                <i class="fa-solid fa-mug-saucer"></i>
+                            </div>
+
+                            <span class="stat-label">TOTAL PRODUCTS</span>
+
+                        </div>
+
+                        <h2 id="totalProducts">0</h2>
+
+                        <p>
+                            Available menu items
+                        </p>
+
+                    </article>
+
+                </div>
+
+
+                <!-- MAIN DASHBOARD GRID -->
+
+                <div class="dashboard-grid">
+
+
+                    <!-- RECENT ORDERS -->
+
+                    <section class="content-card orders-card"
+                        id="orders">
+
+                        <div class="card-header">
+
+                            <div>
+                                <h2>Recent Orders</h2>
+                                <p>Latest customer transactions</p>
+                            </div>
+
+                            <a href="#orders" class="view-all">
+                                View All
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+
+                        </div>
+
+
+                        <div class="table-wrapper">
+
+                            <table>
+
+                                <thead>
+
+                                    <tr>
+                                        <th>ORDER ID</th>
+                                        <th>CUSTOMER</th>
+                                        <th>DATE</th>
+                                        <th>AMOUNT</th>
+                                        <th>STATUS</th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody id="recentOrders">
+
+                                    <tr>
+                                        <td colspan="5">
+                                            No orders available yet.
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- QUICK ACTIONS -->
+
+                    <section class="content-card quick-actions">
+
+                        <div class="card-header">
+
+                            <div>
+                                <h2>Quick Actions</h2>
+                                <p>Manage daily operations</p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="actions-list">
+
+                            <a href="#products" class="action-item">
+
+                                <div class="action-icon">
+                                    <i class="fa-solid fa-plus"></i>
+                                </div>
+
+                                <div>
+                                    <h4>Add Product</h4>
+                                    <p>Create a new menu item</p>
+                                </div>
+
+                                <i class="fa-solid fa-chevron-right"></i>
+
+                            </a>
+
+
+                            <a href="#customers" class="action-item">
+
+                                <div class="action-icon">
+                                    <i class="fa-solid fa-user-plus"></i>
+                                </div>
+
+                                <div>
+                                    <h4>Add Customer</h4>
+                                    <p>Register a new customer</p>
+                                </div>
+
+                                <i class="fa-solid fa-chevron-right"></i>
+
+                            </a>
+
+
+                            <a href="#orders" class="action-item">
+
+                                <div class="action-icon">
+                                    <i class="fa-solid fa-receipt"></i>
+                                </div>
+
+                                <div>
+                                    <h4>New Order</h4>
+                                    <p>Create a customer order</p>
+                                </div>
+
+                                <i class="fa-solid fa-chevron-right"></i>
+
+                            </a>
+
+
+                            <a href="#reports" class="action-item">
+
+                                <div class="action-icon">
+                                    <i class="fa-solid fa-file-invoice"></i>
+                                </div>
+
+                                <div>
+                                    <h4>View Reports</h4>
+                                    <p>Review business performance</p>
+                                </div>
+
+                                <i class="fa-solid fa-chevron-right"></i>
+
+                            </a>
+
+                        </div>
+
+                    </section>
+
+                </div>
+
+
+                <!-- BOTTOM DASHBOARD GRID -->
+
+                <div class="dashboard-grid bottom-grid">
+
+
+                    <!-- INVENTORY -->
+
+                    <section class="content-card"
+                        id="inventory">
+
+                        <div class="card-header">
+
+                            <div>
+                                <h2>Inventory Overview</h2>
+                                <p>Monitor available stock</p>
+                            </div>
+
+                            <a href="#inventory" class="view-all">
+                                Manage
+                            </a>
+
+                        </div>
+
+
+                        <div class="inventory-list"
+                            id="inventoryList">
+
+                            <div class="empty-state">
+                                <i class="fa-solid fa-box-open"></i>
+                                <p>No inventory records available.</p>
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- POPULAR PRODUCTS -->
+
+                    <section class="content-card"
+                        id="products">
+
+                        <div class="card-header">
+
+                            <div>
+                                <h2>Popular Products</h2>
+                                <p>Best-selling coffee selections</p>
+                            </div>
+
+                            <a href="#products" class="view-all">
+                                View All
+                            </a>
+
+                        </div>
+
+
+                        <div class="popular-products"
+                            id="popularProducts">
+
+                            <div class="empty-state">
+
+                                <i class="fa-solid fa-mug-hot"></i>
+
+                                <p>
+                                    Product information will appear here.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                </div>
+
+
+                <!-- SYSTEM SECURITY INFORMATION -->
+
+                <section class="security-overview"
+                    id="security">
+
+                    <div class="security-icon">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+
+                    <div class="security-information">
+
+                        <h3>System Security</h3>
+
+                        <p>
+                            Secure authentication, protected database
+                            operations and controlled access are
+                            essential to this management system.
+                        </p>
+
+                    </div>
+
+                    <span class="security-label">
+                        <i class="fa-solid fa-lock"></i>
+                        Security Enabled
+                    </span>
+
+                </section>
+
+
+                <!-- FOOTER -->
+
+                <footer class="dashboard-footer">
+
+                    <div>
+                        <h3>BEANCRAFT COFFEE HOUSE</h3>
+
+                        <p>
+                            Brewing Quality. Serving Excellence.
+                        </p>
+                    </div>
+
+                    <p>
+                        &copy; <span id="currentYear"></span>
+                        BEANCRAFT COFFEE HOUSE.
+                        All Rights Reserved.
+                    </p>
+
+                </footer>
+
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+   
+
+    <script src="script.js" defer></script>
+
 </body>
-</html>
 
+</html>

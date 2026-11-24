@@ -1,385 +1,567 @@
 
-async function connectBackend() {
-    try {
-        const response = await fetch('/api/products');
+/* =====================================================
+   BEANCRAFT COFFEE HOUSE
+   Professional Management System
+   Frontend JavaScript
+   ===================================================== */
 
-        const products = await response.json();
+"use strict";
 
-        console.log('Products received from backend:', products);
+/* =====================================================
+   1. CONFIGURATION
+   ===================================================== */
 
-    } catch (error) {
-        console.log('Backend connection failed:', error);
+const API_BASE_URL = "/api";
+
+const API_ENDPOINTS = {
+    dashboard: "/dashboard/summary",
+    orders: "/orders",
+    inventory: "/inventory/low-stock",
+    popularProducts: "/products",
+    logout: "/auth/logout"
+};
+
+const currencyFormatter = new Intl.NumberFormat("en-ET", {
+    style: "currency",
+    currency: "ETB",
+    maximumFractionDigits: 2
+});
+
+const numberFormatter = new Intl.NumberFormat("en-ET");
+
+/* =====================================================
+   2. DOM ELEMENTS
+   ===================================================== */
+
+const elements = {
+    sidebar: document.getElementById("sidebar"),
+    menuToggle: document.getElementById("menuToggle"),
+    currentDate: document.getElementById("currentDate"),
+    currentYear: document.getElementById("currentYear"),
+
+    logoutButton: document.getElementById("logoutButton"),
+    adminName: document.getElementById("adminName"),
+
+    statisticsFilter: document.getElementById("statisticsFilter"),
+
+    totalSales: document.getElementById("totalSales"),
+    totalOrders: document.getElementById("totalOrders"),
+    totalCustomers: document.getElementById("totalCustomers"),
+    totalProducts: document.getElementById("totalProducts"),
+
+    recentOrders: document.getElementById("recentOrders"),
+    inventoryList: document.getElementById("inventoryList"),
+    popularProducts: document.getElementById("popularProducts")
+};
+
+/* =====================================================
+   3. GENERAL HELPER FUNCTIONS
+   ===================================================== */
+
+function formatCurrency(value) {
+    const amount = Number(value);
+
+    if (!Number.isFinite(amount)) {
+        return currencyFormatter.format(0);
     }
-   }
 
-    connectBackend();
+    return currencyFormatter.format(amount);
+}
 
+function formatNumber(value) {
+    const number = Number(value);
 
+    if (!Number.isFinite(number)) {
+        return "0";
+    }
 
+    return numberFormatter.format(number);
+}
 
+function setText(element, value) {
+    if (!element) return;
 
- const products = [                                               
-    { id: 1, name: "Ethiopian Coffee", price: 30, icon: "☕" },
-    { id: 2, name: "Macchiato", price: 60, icon: "🥛" },
-    { id: 3, name: "Tea", price: 20, icon: "🍵" },
-    { id: 4, name: "Espress", price: 30, icon: "☕" },
-    { id: 5, name: "Cappuccino", price: 130, icon: "🥤" },
-    { id: 6, name: "Fresh Juice", price: 120, icon: "🧃" },
-    { id: 7, name: "Bread", price: 25, icon: "🍞" },
-    { id: 8, name: "Cake", price: 100, icon: "🍰" }
-];
+    element.textContent = String(value ?? "");
+}
 
-let cart = [];
-let sales = [];
-let nextReceiptNumber = 1;
+function showMessage(element, message) {
+    if (!element) return;
 
-const money = amount =>
-    amount.toLocaleString("en-ET", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
+    element.textContent = message;
+}
+
+/* =====================================================
+   4. DATE AND FOOTER YEAR
+   ===================================================== */
+
+function updateDate() {
+    const now = new Date();
+
+    if (elements.currentDate) {
+        elements.currentDate.textContent =
+            new Intl.DateTimeFormat("en", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+            }).format(now);
+    }
+
+    setText(elements.currentYear, now.getFullYear());
+}
+
+/* =====================================================
+   5. MOBILE SIDEBAR
+   ===================================================== */
+
+function initializeSidebar() {
+    const sidebar = elements.sidebar;
+    const menuToggle = elements.menuToggle;
+
+    if (!sidebar || !menuToggle) return;
+
+    menuToggle.setAttribute("aria-expanded", "false");
+
+    menuToggle.addEventListener("click", () => {
+        const isOpen = sidebar.classList.toggle("active");
+
+        menuToggle.setAttribute(
+            "aria-expanded",
+            String(isOpen)
+        );
     });
 
-function getTotal() {
-    return cart.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0
-    );
-}
+    document.addEventListener("click", (event) => {
+        const clickedInsideSidebar = sidebar.contains(event.target);
+        const clickedMenuButton = menuToggle.contains(event.target);
 
+        if (
+            window.innerWidth <= 768 &&
+            !clickedInsideSidebar &&
+            !clickedMenuButton
+        ) {
+            sidebar.classList.remove("active");
+            menuToggle.setAttribute("aria-expanded", "false");
+        }
+    });
 
-function displayDate() {
-    document.getElementById("current-date").textContent =
-        new Date().toLocaleString();
-}
-
-
-function displayMenu() {
-    const menuGrid = document.getElementById("menu-grid");
-
-    menuGrid.innerHTML = products.map(product => `
-        <article class="product-card">
-            <span class="product-icon">${product.icon}</span>
-            <h3>${product.name}</h3>
-            <p class="price">${money(product.price)} Birr</p>
-            <button type="button" data-product-id="${product.id}">
-                Add to Order
-            </button>
-        </article>
-    `).join("");
-}
-
-
-function addToCart(productId) {
-    const product = products.find(item => item.id === productId);
-
-    if (!product) return;
-
-    const existingItem = cart.find(item => item.id === productId);
-
-    if (existingItem) {
-        existingItem.quantity++;
-    } else {
-        cart.push({
-            ...product,
-            quantity: 1
+    sidebar.querySelectorAll(".nav-link").forEach((link) => {
+        link.addEventListener("click", () => {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove("active");
+                menuToggle.setAttribute("aria-expanded", "false");
+            }
         });
-    }
-
-    displayCart();
+    });
 }
 
+/* =====================================================
+   6. ACTIVE NAVIGATION
+   ===================================================== */
 
-function changeQuantity(productId, amount) {
-    const item = cart.find(product => product.id === productId);
+function initializeNavigation() {
+    const navigationLinks = document.querySelectorAll(".nav-link");
 
-    if (!item) return;
+    navigationLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+            navigationLinks.forEach((item) => {
+                item.classList.remove("active");
+            });
 
-    item.quantity += amount;
-
-    if (item.quantity <= 0) {
-        cart = cart.filter(product => product.id !== productId);
-    }
-
-    displayCart();
+            link.classList.add("active");
+        });
+    });
 }
 
+/* =====================================================
+   7. SECURE API REQUEST HELPER
+   ===================================================== */
 
-function removeItem(productId) {
-    cart = cart.filter(item => item.id !== productId);
-    displayCart();
-}
+async function apiRequest(endpoint, options = {}) {
+    const url = `${API_BASE_URL}${endpoint}`;
 
-
-function displayCart() {
-    const cartItems = document.getElementById("cart-items");
-
-    if (cart.length === 0) {
-        cartItems.innerHTML =
-            '<p class="empty">No items in the order yet.</p>';
-    } else {
-        cartItems.innerHTML = cart.map(item => `
-            <div class="cart-row">
-                <div>
-                    <p><strong>${item.name}</strong></p>
-                    <p>${money(item.price)} Birr each</p>
-                    <p>Subtotal: ${money(item.price * item.quantity)} Birr</p>
-                </div>
-
-                <div class="quantity-controls">
-                    <button type="button"
-                        data-action="decrease"
-                        data-id="${item.id}"
-                        aria-label="Decrease ${item.name} quantity">
-                        −
-                    </button>
-
-                    <strong>${item.quantity}</strong>
-
-                    <button type="button"
-                        data-action="increase"
-                        data-id="${item.id}"
-                        aria-label="Increase ${item.name} quantity">
-                        +
-                    </button>
-
-                    <button type="button"
-                        class="remove-btn"
-                        data-action="remove"
-                        data-id="${item.id}">
-                        Remove
-                    </button>
-                </div>
-            </div>
-        `).join("");
-    }
-
-    document.getElementById("order-total").textContent =
-        money(getTotal());
-
-    updateChange();
-}
-
-
-function updateChange() {
-    const total = getTotal();
-    const paymentInput = document.getElementById("payment");
-    const payment = Number(paymentInput.value);
-    const message = document.getElementById("payment-message");
-
-    const validPayment =
-        paymentInput.value.trim() !== "" &&
-        Number.isFinite(payment) &&
-        payment >= 0;
-
-    document.getElementById("change").textContent =
-        money(validPayment ? Math.max(0, payment - total) : 0);
-
-    if (cart.length === 0) {
-        message.textContent = "";
-    } else if (!validPayment) {
-        message.textContent = "Enter the amount received.";
-    } else if (payment < total) {
-        message.textContent =
-            "Insufficient payment. Remaining: " +
-            money(total - payment) + " Birr.";
-    } else {
-        message.textContent = "Payment is sufficient.";
-    }
-}
-
-
-function completeSale() {
-    if (cart.length === 0) {
-        alert("Please add products to the order first.");
-        return;
-    }
-
-    const paymentInput = document.getElementById("payment");
-    const payment = Number(paymentInput.value);
-    const total = getTotal();
-
-    if (
-        paymentInput.value.trim() === "" ||
-        !Number.isFinite(payment) ||
-        payment < total
-    ) {
-        alert("Enter a valid payment equal to or greater than the total.");
-        return;
-    }
-
-    const sale = {
-        receiptNumber: nextReceiptNumber++,
-        customer:
-            document.getElementById("customer-name").value.trim() ||
-            "Walk-in Customer",
-        items: cart.map(item => ({ ...item })),
-        total: total,
-        payment: payment,
-        change: payment - total,
-        date: new Date()
+    const headers = {
+        "Accept": "application/json",
+        ...options.headers
     };
 
-    sales.push(sale);
+    // Add a CSRF token when the backend provides one.
+    // The token should be rendered by the server, not stored in localStorage.
+    const csrfMeta = document.querySelector(
+        'meta[name="csrf-token"]'
+    );
 
-    displayReceipt(sale);
-    displaySales();
+    if (csrfMeta && options.method && options.method !== "GET") {
+        headers["X-CSRF-Token"] = csrfMeta.content;
+    }
 
-    cart = [];
-    document.getElementById("customer-name").value = "";
-    paymentInput.value = "";
-
-    displayCart();
-
-    document.getElementById("receipt-section").hidden = false;
-    document.getElementById("receipt-section").scrollIntoView({
-        behavior: "smooth",
-        block: "start"
+    const response = await fetch(url, {
+        ...options,
+        headers,
+        credentials: "same-origin"
     });
+
+    if (response.status === 401) {
+        window.location.assign("/login.html");
+        throw new Error("Your session has expired. Please log in again.");
+    }
+
+    if (!response.ok) {
+        throw new Error(`Request failed (${response.status}).`);
+    }
+
+    const contentType = response.headers.get("content-type") || "";
+
+    if (!contentType.includes("application/json")) {
+        throw new Error("The server returned an unexpected response.");
+    }
+
+    return response.json();
 }
 
+/* =====================================================
+   8. DASHBOARD STATISTICS
+   ===================================================== */
 
-function displayReceipt(sale) {
-    const receipt = document.getElementById("receipt");
+async function loadDashboardStatistics() {
+    try {
+        const period = elements.statisticsFilter?.value || "today";
 
-    const itemRows = sale.items.map(item => `
-        <tr>
-            <td>${item.name} × ${item.quantity}</td>
-            <td>${money(item.price * item.quantity)} Birr</td>
-        </tr>
-    `).join("");
+        const query = new URLSearchParams({
+            period
+        });
 
-    receipt.innerHTML = `
-        <h2>☕ Jimma Coffee House</h2>
-        <p>Jimma Town, Oromia, Ethiopia</p>
-        <hr>
+        const result = await apiRequest(
+            `${API_ENDPOINTS.dashboard}?${query.toString()}`
+        );
 
-        <p>Receipt No: ${sale.receiptNumber}</p>
-        <p>Customer: ${sale.customer}</p>
-        <p>Date: ${sale.date.toLocaleString()}</p>
+        const statistics = result.data ?? result;
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Amount</th>
-                </tr>
-            </thead>
-            <tbody>${itemRows}</tbody>
-        </table>
+        setText(
+            elements.totalSales,
+            formatCurrency(statistics.totalSales)
+        );
 
-        <h3>Total: ${money(sale.total)} Birr</h3>
-        <p>Paid: ${money(sale.payment)} Birr</p>
-        <p>Change: ${money(sale.change)} Birr</p>
+        setText(
+            elements.totalOrders,
+            formatNumber(statistics.totalOrders)
+        );
 
-        <hr>
-        <p>Thank you for visiting Jimma Coffee House!</p>
-    `;
+        setText(
+            elements.totalCustomers,
+            formatNumber(statistics.totalCustomers)
+        );
+
+        setText(
+            elements.totalProducts,
+            formatNumber(statistics.totalProducts)
+        );
+
+    } catch (error) {
+        console.error("Dashboard statistics:", error);
+    }
 }
 
+/* =====================================================
+   9. RECENT ORDERS
+   ===================================================== */
 
-function displaySales() {
-    const today = new Date();
+function createTableCell(value) {
+    const cell = document.createElement("td");
 
-    const todaySales = sales.filter(sale =>
-        sale.date.toDateString() === today.toDateString()
-    );
+    // textContent prevents HTML from being interpreted as markup.
+    cell.textContent = String(value ?? "—");
 
-    const totalSales = todaySales.reduce(
-        (sum, sale) => sum + sale.total,
-        0
-    );
+    return cell;
+}
 
-    document.getElementById("sales-count").textContent =
-        todaySales.length;
+function createStatusCell(status) {
+    const cell = document.createElement("td");
+    const badge = document.createElement("span");
 
-    document.getElementById("sales-total").textContent =
-        money(totalSales);
+    const allowedStatuses = [
+        "pending",
+        "preparing",
+        "completed",
+        "cancelled"
+    ];
 
-    const history = document.getElementById("sales-history");
+    const normalizedStatus = String(status || "").toLowerCase();
 
-    if (todaySales.length === 0) {
-        history.innerHTML = `
-            <tr>
-                <td colspan="4">No sales recorded yet.</td>
-            </tr>
-        `;
+    badge.classList.add("status");
+
+    if (allowedStatuses.includes(normalizedStatus)) {
+        badge.classList.add(normalizedStatus);
+        badge.textContent = normalizedStatus;
+    } else {
+        badge.textContent = "Unknown";
+    }
+
+    cell.appendChild(badge);
+
+    return cell;
+}
+
+function renderRecentOrders(orders) {
+    const container = elements.recentOrders;
+
+    if (!container) return;
+
+    container.replaceChildren();
+
+    if (!Array.isArray(orders) || orders.length === 0) {
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+
+        cell.colSpan = 5;
+        cell.textContent = "No recent orders available.";
+
+        row.appendChild(cell);
+        container.appendChild(row);
+
         return;
     }
 
-    history.innerHTML = [...todaySales].reverse().map(sale => `
-        <tr>
-            <td>${sale.receiptNumber}</td>
-            <td>${sale.customer}</td>
-            <td>${sale.date.toLocaleTimeString()}</td>
-            <td>${money(sale.total)}</td>
-        </tr>
-    `).join("");
+    orders.forEach((order) => {
+        const row = document.createElement("tr");
+
+        row.appendChild(
+            createTableCell(order.order_number)
+        );
+
+        row.appendChild(
+            createTableCell(order.customer_name)
+        );
+
+        row.appendChild(
+            createTableCell(formatCurrency(order.total_amount))
+        );
+
+        row.appendChild(
+            createStatusCell(order.order_status)
+        );
+
+        row.appendChild(
+            createTableCell(order.created_at)
+        );
+
+        container.appendChild(row);
+    });
 }
 
-// Menu button events.
-document.getElementById("menu-grid").addEventListener("click", event => {
-    const button = event.target.closest("[data-product-id]");
+async function loadRecentOrders() {
+    try {
+        const query = new URLSearchParams({
+            limit: "5"
+        });
 
-    if (button) {
-        addToCart(Number(button.dataset.productId));
+        const result = await apiRequest(
+            `${API_ENDPOINTS.orders}?${query.toString()}`
+        );
+
+        renderRecentOrders(result.data ?? result.orders ?? []);
+
+    } catch (error) {
+        console.error("Recent orders:", error);
+        showMessage(
+            elements.recentOrders,
+            "Unable to load recent orders."
+        );
     }
-});
+}
 
-// Cart button events.
-document.getElementById("cart-items").addEventListener("click", event => {
-    const button = event.target.closest("[data-action]");
+/* =====================================================
+   10. INVENTORY
+   ===================================================== */
 
-    if (!button) return;
+function renderInventory(items) {
+    const container = elements.inventoryList;
 
-    const productId = Number(button.dataset.id);
-    const action = button.dataset.action;
+    if (!container) return;
 
-    if (action === "increase") {
-        changeQuantity(productId, 1);
-    } else if (action === "decrease") {
-        changeQuantity(productId, -1);
-    } else if (action === "remove") {
-        removeItem(productId);
+    container.replaceChildren();
+
+    if (!Array.isArray(items) || items.length === 0) {
+        showMessage(container, "No low-stock products found.");
+        return;
     }
-});
 
-// Payment and order buttons.
-document.getElementById("payment").addEventListener(
-    "input",
-    updateChange
-);
+    items.forEach((item) => {
+        const wrapper = document.createElement("div");
+        const details = document.createElement("div");
 
-document.getElementById("complete-btn").addEventListener(
-    "click",
-    completeSale
-);
+        const name = document.createElement("h4");
+        const description = document.createElement("p");
+        const quantity = document.createElement("span");
 
-document.getElementById("clear-btn").addEventListener("click", () => {
-    cart = [];
+        wrapper.className = "inventory-item";
 
-    document.getElementById("customer-name").value = "";
-    document.getElementById("payment").value = "";
+        name.textContent = item.product_name || "Unnamed product";
 
-    displayCart();
-});
+        description.textContent =
+            item.category_name || "Coffee House Inventory";
 
-document.getElementById("print-btn").addEventListener("click", () => {
-    window.print();
-});
+        quantity.className = "quantity";
+        quantity.textContent =
+            `${formatNumber(item.stock_quantity)} available`;
 
+        details.append(name, description);
+        wrapper.append(details, quantity);
 
-displayDate();
-displayMenu();
-displayCart();
-displaySales();
+        container.appendChild(wrapper);
+    });
+}
 
+async function loadInventory() {
+    try {
+        const result = await apiRequest(API_ENDPOINTS.inventory);
 
-displayDate();
+        renderInventory(result.data ?? result.items ?? []);
 
-displayMenu();
+    } catch (error) {
+        console.error("Inventory:", error);
 
-displayCart();
+        showMessage(
+            elements.inventoryList,
+            "Unable to load inventory information."
+        );
+    }
+}
 
+/* =====================================================
+   11. POPULAR PRODUCTS
+   ===================================================== */
 
-displaySales();
+function renderPopularProducts(products) {
+    const container = elements.popularProducts;
 
+    if (!container) return;
+
+    container.replaceChildren();
+
+    if (!Array.isArray(products) || products.length === 0) {
+        showMessage(container, "No popular products available.");
+        return;
+    }
+
+    products.forEach((product) => {
+        const wrapper = document.createElement("div");
+        const details = document.createElement("div");
+
+        const name = document.createElement("h4");
+        const price = document.createElement("p");
+
+        wrapper.className = "product-item";
+
+        name.textContent = product.product_name || "Unnamed product";
+
+        price.textContent = formatCurrency(product.price);
+
+        details.append(name, price);
+        wrapper.appendChild(details);
+
+        container.appendChild(wrapper);
+    });
+}
+
+async function loadPopularProducts() {
+    try {
+        const result = await apiRequest(API_ENDPOINTS.popularProducts);
+
+        renderPopularProducts(result.data ?? result.products ?? []);
+
+    } catch (error) {
+        console.error("Popular products:", error);
+
+        showMessage(
+            elements.popularProducts,
+            "Unable to load popular products."
+        );
+    }
+}
+
+/* =====================================================
+   12. STATISTICS FILTER
+   ===================================================== */
+
+function initializeStatisticsFilter() {
+    if (!elements.statisticsFilter) return;
+
+    elements.statisticsFilter.addEventListener("change", () => {
+        loadDashboardStatistics();
+    });
+}
+
+/* =====================================================
+   13. LOGOUT
+   ===================================================== */
+
+async function logout() {
+    if (!confirm("Are you sure you want to log out?")) {
+        return;
+    }
+
+    if (elements.logoutButton) {
+        elements.logoutButton.disabled = true;
+    }
+
+    try {
+        await apiRequest(API_ENDPOINTS.logout, {
+            method: "POST"
+        });
+
+        window.location.assign("/login.html");
+
+    } catch (error) {
+        console.error("Logout:", error);
+
+        if (elements.logoutButton) {
+            elements.logoutButton.disabled = false;
+        }
+
+        alert("Unable to log out. Please try again.");
+    }
+}
+
+function initializeLogout() {
+    if (!elements.logoutButton) return;
+
+    elements.logoutButton.addEventListener("click", logout);
+}
+
+/* =====================================================
+   14. LOAD DASHBOARD
+   ===================================================== */
+
+async function loadDashboard() {
+    await Promise.allSettled([
+        loadDashboardStatistics(),
+        loadRecentOrders(),
+        loadInventory(),
+        loadPopularProducts()
+    ]);
+}
+
+/* =====================================================
+   15. APPLICATION INITIALIZATION
+   ===================================================== */
+
+function initializeApp() {
+    updateDate();
+
+    initializeSidebar();
+
+    initializeNavigation();
+
+    initializeStatisticsFilter();
+
+    initializeLogout();
+
+    loadDashboard();
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeApp);
+} else {
+    initializeApp();
+}
