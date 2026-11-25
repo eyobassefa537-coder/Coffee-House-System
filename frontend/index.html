@@ -1,641 +1,645 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<meta name="description"
-    content="BEANCRAFT COFFEE HOUSE - Professional Coffee House Management System">
-
-<meta name="theme-color" content="#17130f">
-
-<title>BEANCRAFT COFFEE HOUSE | Management System</title>
-
-<!-- Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
-    rel="stylesheet">
-
-<!-- Icons -->
-<link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
-<!-- Main CSS -->
-<link rel="stylesheet" href="style.css">
-
-</head>
-    
-<body>
-
-    <div class="dashboard-container">
-
-        <!-- SIDEBAR -->
-
-        <aside class="sidebar" id="sidebar">
-
-            <div class="brand">
-
-                <div class="brand-icon">
-                    <i class="fa-solid fa-mug-hot"></i>
-                </div>
-
-                <div class="brand-info">
-                    <h2>BEANCRAFT</h2>
-                    <span>COFFEE HOUSE</span>
-                </div>
-
-            </div>
-
-
-            <!-- NAVIGATION -->
-
-            <nav class="sidebar-navigation">
-
-                <p class="nav-heading">MAIN MENU</p>
-
-                <a href="#dashboard" class="nav-link active">
-                    <i class="fa-solid fa-chart-pie"></i>
-                    <span>Dashboard</span>
-                </a>
-
-                <a href="#orders" class="nav-link">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                    <span>Orders</span>
-                    <span class="nav-badge">04</span>
-                </a>
-
-                <a href="#products" class="nav-link">
-                    <i class="fa-solid fa-mug-saucer"></i>
-                    <span>Products</span>
-                </a>
-
-                <a href="#categories" class="nav-link">
-                    <i class="fa-solid fa-layer-group"></i>
-                    <span>Categories</span>
-                </a>
-
-                <a href="#customers" class="nav-link">
-                    <i class="fa-solid fa-users"></i>
-                    <span>Customers</span>
-                </a>
-
-
-                <p class="nav-heading">MANAGEMENT</p>
-
-                <a href="#inventory" class="nav-link">
-                    <i class="fa-solid fa-boxes-stacked"></i>
-                    <span>Inventory</span>
-                </a>
-
-                <a href="#payments" class="nav-link">
-                    <i class="fa-solid fa-credit-card"></i>
-                    <span>Payments</span>
-                </a>
-
-                <a href="#reports" class="nav-link">
-                    <i class="fa-solid fa-chart-line"></i>
-                    <span>Reports</span>
-                </a>
-
-
-                <p class="nav-heading">SYSTEM</p>
-
-                <a href="#staff" class="nav-link">
-                    <i class="fa-solid fa-user-group"></i>
-                    <span>Staff Management</span>
-                </a>
-
-                <a href="#security" class="nav-link">
-                    <i class="fa-solid fa-shield-halved"></i>
-                    <span>Security</span>
-                </a>
-
-                <a href="#settings" class="nav-link">
-                    <i class="fa-solid fa-gear"></i>
-                    <span>Settings</span>
-                </a>
-
-            </nav>
-
-
-            <!-- SIDEBAR FOOTER -->
-
-            <div class="sidebar-footer">
-
-                <div class="sidebar-coffee">
-                    <i class="fa-solid fa-seedling"></i>
-
-                    <div>
-                        <h4>Premium Coffee</h4>
-                        <p>Crafted with Excellence</p>
-                    </div>
-                </div>
-
-                <button class="logout-button" id="logoutButton">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                    <span>Logout</span>
-                </button>
-
-            </div>
-
-        </aside>
-
-
-        <!-- MAIN CONTENT -->
-
-        <main class="main-content">
-
-            <!-- TOP HEADER -->
-
-            <header class="top-header">
-
-                <div class="header-left">
-
-                    <button class="menu-toggle" id="menuToggle"
-                        aria-label="Toggle navigation">
-                        <i class="fa-solid fa-bars"></i>
-                    </button>
-
-                    <div class="page-heading">
-                        <h1>Dashboard</h1>
-                        <p>Welcome back! Here's what's happening today.</p>
-                    </div>
-
-                </div>
-
-
-                <div class="header-right">
-
-                    <div class="header-date">
-                        <i class="fa-regular fa-calendar"></i>
-                        <span id="currentDate">Today</span>
-                    </div>
-
-                    <button class="notification-button"
-                        aria-label="Notifications">
-
-                        <i class="fa-regular fa-bell"></i>
-                        <span class="notification-dot"></span>
-
-                    </button>
-
-
-                    <div class="admin-profile">
-
-                        <div class="admin-avatar">
-                            <i class="fa-solid fa-user"></i>
-                        </div>
-
-                        <div class="admin-details">
-                            <h4 id="adminName">Administrator</h4>
-                            <span>System Admin</span>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </header>
-
-
-            <!-- DASHBOARD CONTENT -->
-
-            <section class="dashboard-content" id="dashboard">
-
-                <!-- WELCOME BANNER -->
-
-                <div class="welcome-banner">
-
-                    <div class="welcome-text">
-
-                        <span class="welcome-label">
-                            BEANCRAFT COFFEE HOUSE
-                        </span>
-
-                        <h2>Every Cup Tells a Story.</h2>
-
-                        <p>
-                            Manage your coffee business, monitor sales
-                            and deliver exceptional customer experiences.
-                        </p>
-
-                        <a href="#orders" class="primary-button">
-                            <i class="fa-solid fa-plus"></i>
-                            Manage Orders
-                        </a>
-
-                    </div>
-
-                    <div class="welcome-icon">
-                        <i class="fa-solid fa-mug-hot"></i>
-                    </div>
-
-                </div>
-
-
-                <!-- STATISTICS -->
-
-                <div class="section-heading">
-
-                    <div>
-                        <h2>Business Overview</h2>
-                        <p>Monitor your coffee house performance.</p>
-                    </div>
-
-                    <select id="statisticsFilter"
-                        aria-label="Statistics time period">
-
-                        <option value="today">Today</option>
-                        <option value="week">This Week</option>
-                        <option value="month">This Month</option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="statistics-grid">
-
-
-                    <!-- TOTAL SALES -->
-
-                    <article class="stat-card">
-
-                        <div class="stat-top">
-
-                            <div class="stat-icon sales-icon">
-                                <i class="fa-solid fa-wallet"></i>
-                            </div>
-
-                            <span class="stat-label">TOTAL SALES</span>
-
-                        </div>
-
-                        <h2 id="totalSales">ETB 0.00</h2>
-
-                        <p>
-                            <i class="fa-solid fa-chart-line"></i>
-                            Revenue overview
-                        </p>
-
-                    </article>
-
-
-                    <!-- TOTAL ORDERS -->
-
-                    <article class="stat-card">
-
-                        <div class="stat-top">
-
-                            <div class="stat-icon orders-icon">
-                                <i class="fa-solid fa-bag-shopping"></i>
-                            </div>
-
-                            <span class="stat-label">TOTAL ORDERS</span>
-
-                        </div>
-
-                        <h2 id="totalOrders">0</h2>
-
-                        <p>
-                            Orders received
-                        </p>
-
-                    </article>
-
-
-                    <!-- CUSTOMERS -->
-
-                    <article class="stat-card">
-
-                        <div class="stat-top">
-
-                            <div class="stat-icon customers-icon">
-                                <i class="fa-solid fa-users"></i>
-                            </div>
-
-                            <span class="stat-label">CUSTOMERS</span>
-
-                        </div>
-
-                        <h2 id="totalCustomers">0</h2>
-
-                        <p>
-                            Registered customers
-                        </p>
-
-                    </article>
-
-
-                    <!-- PRODUCTS -->
-
-                    <article class="stat-card">
-
-                        <div class="stat-top">
-
-                            <div class="stat-icon products-icon">
-                                <i class="fa-solid fa-mug-saucer"></i>
-                            </div>
-
-                            <span class="stat-label">TOTAL PRODUCTS</span>
-
-                        </div>
-
-                        <h2 id="totalProducts">0</h2>
-
-                        <p>
-                            Available menu items
-                        </p>
-
-                    </article>
-
-                </div>
-
-
-                <!-- MAIN DASHBOARD GRID -->
-
-                <div class="dashboard-grid">
-
-
-                    <!-- RECENT ORDERS -->
-
-                    <section class="content-card orders-card"
-                        id="orders">
-
-                        <div class="card-header">
-
-                            <div>
-                                <h2>Recent Orders</h2>
-                                <p>Latest customer transactions</p>
-                            </div>
-
-                            <a href="#orders" class="view-all">
-                                View All
-                                <i class="fa-solid fa-arrow-right"></i>
-                            </a>
-
-                        </div>
-
-
-                        <div class="table-wrapper">
-
-                            <table>
-
-                                <thead>
-
-                                    <tr>
-                                        <th>ORDER ID</th>
-                                        <th>CUSTOMER</th>
-                                        <th>DATE</th>
-                                        <th>AMOUNT</th>
-                                        <th>STATUS</th>
-                                    </tr>
-
-                                </thead>
-
-                                <tbody id="recentOrders">
-
-                                    <tr>
-                                        <td colspan="5">
-                                            No orders available yet.
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-
-                            </table>
-
-                        </div>
-
-                    </section>
-
-
-                    <!-- QUICK ACTIONS -->
-
-                    <section class="content-card quick-actions">
-
-                        <div class="card-header">
-
-                            <div>
-                                <h2>Quick Actions</h2>
-                                <p>Manage daily operations</p>
-                            </div>
-
-                        </div>
-
-
-                        <div class="actions-list">
-
-                            <a href="#products" class="action-item">
-
-                                <div class="action-icon">
-                                    <i class="fa-solid fa-plus"></i>
-                                </div>
-
-                                <div>
-                                    <h4>Add Product</h4>
-                                    <p>Create a new menu item</p>
-                                </div>
-
-                                <i class="fa-solid fa-chevron-right"></i>
-
-                            </a>
-
-
-                            <a href="#customers" class="action-item">
-
-                                <div class="action-icon">
-                                    <i class="fa-solid fa-user-plus"></i>
-                                </div>
-
-                                <div>
-                                    <h4>Add Customer</h4>
-                                    <p>Register a new customer</p>
-                                </div>
-
-                                <i class="fa-solid fa-chevron-right"></i>
-
-                            </a>
-
-
-                            <a href="#orders" class="action-item">
-
-                                <div class="action-icon">
-                                    <i class="fa-solid fa-receipt"></i>
-                                </div>
-
-                                <div>
-                                    <h4>New Order</h4>
-                                    <p>Create a customer order</p>
-                                </div>
-
-                                <i class="fa-solid fa-chevron-right"></i>
-
-                            </a>
-
-
-                            <a href="#reports" class="action-item">
-
-                                <div class="action-icon">
-                                    <i class="fa-solid fa-file-invoice"></i>
-                                </div>
-
-                                <div>
-                                    <h4>View Reports</h4>
-                                    <p>Review business performance</p>
-                                </div>
-
-                                <i class="fa-solid fa-chevron-right"></i>
-
-                            </a>
-
-                        </div>
-
-                    </section>
-
-                </div>
-
-
-                <!-- BOTTOM DASHBOARD GRID -->
-
-                <div class="dashboard-grid bottom-grid">
-
-
-                    <!-- INVENTORY -->
-
-                    <section class="content-card"
-                        id="inventory">
-
-                        <div class="card-header">
-
-                            <div>
-                                <h2>Inventory Overview</h2>
-                                <p>Monitor available stock</p>
-                            </div>
-
-                            <a href="#inventory" class="view-all">
-                                Manage
-                            </a>
-
-                        </div>
-
-
-                        <div class="inventory-list"
-                            id="inventoryList">
-
-                            <div class="empty-state">
-                                <i class="fa-solid fa-box-open"></i>
-                                <p>No inventory records available.</p>
-                            </div>
-
-                        </div>
-
-                    </section>
-
-
-                    <!-- POPULAR PRODUCTS -->
-
-                    <section class="content-card"
-                        id="products">
-
-                        <div class="card-header">
-
-                            <div>
-                                <h2>Popular Products</h2>
-                                <p>Best-selling coffee selections</p>
-                            </div>
-
-                            <a href="#products" class="view-all">
-                                View All
-                            </a>
-
-                        </div>
-
-
-                        <div class="popular-products"
-                            id="popularProducts">
-
-                            <div class="empty-state">
-
-                                <i class="fa-solid fa-mug-hot"></i>
-
-                                <p>
-                                    Product information will appear here.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-                    </section>
-
-                </div>
-
-
-                <!-- SYSTEM SECURITY INFORMATION -->
-
-                <section class="security-overview"
-                    id="security">
-
-                    <div class="security-icon">
-                        <i class="fa-solid fa-shield-halved"></i>
-                    </div>
-
-                    <div class="security-information">
-
-                        <h3>System Security</h3>
-
-                        <p>
-                            Secure authentication, protected database
-                            operations and controlled access are
-                            essential to this management system.
-                        </p>
-
-                    </div>
-
-                    <span class="security-label">
-                        <i class="fa-solid fa-lock"></i>
-                        Security Enabled
-                    </span>
-
-                </section>
-
-
-                <!-- FOOTER -->
-
-                <footer class="dashboard-footer">
-
-                    <div>
-                        <h3>BEANCRAFT COFFEE HOUSE</h3>
-
-                        <p>
-                            Brewing Quality. Serving Excellence.
-                        </p>
-                    </div>
-
-                    <p>
-                        &copy; <span id="currentYear"></span>
-                        BEANCRAFT COFFEE HOUSE.
-                        All Rights Reserved.
-                    </p>
-
-                </footer>
-
-
-            </section>
-
-        </main>
-
-    </div>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeanCraft Coffee House | Management System</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
    
+</head>
 
-    <script src="script.js" defer></script>
+<body>
+
+<div class="app-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+
+        <div class="brand">
+            <i class="fa-solid fa-mug-hot"></i>
+            <div>
+                <h2>BeanCraft</h2>
+                <small>Coffee House</small>
+            </div>
+        </div>
+
+        <nav class="navigation">
+
+            <p class="nav-label">MAIN MENU</p>
+
+            <a href="#dashboard" class="nav-link active" data-page="dashboard">
+                <i class="fa-solid fa-chart-line"></i> Dashboard
+            </a>
+
+            <a href="#orders" class="nav-link" data-page="orders">
+                <i class="fa-solid fa-receipt"></i> Orders
+            </a>
+
+            <a href="#products" class="nav-link" data-page="products">
+                <i class="fa-solid fa-mug-saucer"></i> Products
+            </a>
+
+            <a href="#categories" class="nav-link" data-page="categories">
+                <i class="fa-solid fa-layer-group"></i> Categories
+            </a>
+
+            <a href="#customers" class="nav-link" data-page="customers">
+                <i class="fa-solid fa-users"></i> Customers
+            </a>
+
+            <a href="#inventory" class="nav-link" data-page="inventory">
+                <i class="fa-solid fa-boxes-stacked"></i> Inventory
+            </a>
+
+            <a href="#payments" class="nav-link" data-page="payments">
+                <i class="fa-solid fa-money-bill-wave"></i> Payments
+            </a>
+
+            <p class="nav-label">MANAGEMENT</p>
+
+            <a href="#reports" class="nav-link" data-page="reports">
+                <i class="fa-solid fa-chart-pie"></i> Reports
+            </a>
+
+            <a href="#staff" class="nav-link" data-page="staff">
+                <i class="fa-solid fa-user-tie"></i> Staff
+            </a>
+
+            <a href="#security" class="nav-link" data-page="security">
+                <i class="fa-solid fa-shield-halved"></i> Security
+            </a>
+
+            <a href="#settings" class="nav-link" data-page="settings">
+                <i class="fa-solid fa-gear"></i> Settings
+            </a>
+
+        </nav>
+
+        <button id="logoutButton" class="logout-button">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+
+            <button id="menuToggle" class="menu-toggle">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <div>
+                <h2>Management Dashboard</h2>
+                <p id="currentDate"></p>
+            </div>
+
+            <div class="admin-profile">
+                <i class="fa-solid fa-circle-user"></i>
+                <span id="adminName">Administrator</span>
+            </div>
+
+        </header>
+
+
+        <!-- DASHBOARD -->
+        <section class="page-section active" id="dashboard">
+
+            <div class="page-heading">
+                <div>
+                    <h1>Dashboard Overview</h1>
+                    <p>Welcome to BeanCraft Coffee House Management.</p>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+
+                <article class="stat-card">
+                    <i class="fa-solid fa-sack-dollar"></i>
+                    <h3>Total Sales</h3>
+                    <h2 id="totalSales">0.00 ETB</h2>
+                </article>
+
+                <article class="stat-card">
+                    <i class="fa-solid fa-receipt"></i>
+                    <h3>Total Orders</h3>
+                    <h2 id="totalOrders">0</h2>
+                </article>
+
+                <article class="stat-card">
+                    <i class="fa-solid fa-users"></i>
+                    <h3>Customers</h3>
+                    <h2 id="totalCustomers">0</h2>
+                </article>
+
+                <article class="stat-card">
+                    <i class="fa-solid fa-mug-hot"></i>
+                    <h3>Products</h3>
+                    <h2 id="totalProducts">0</h2>
+                </article>
+
+            </div>
+
+            <div class="content-grid">
+
+                <article class="content-card">
+                    <h3>Recent Orders</h3>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentOrders">
+                                <tr>
+                                    <td colspan="5">Loading orders...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </article>
+
+                <article class="content-card">
+                    <h3>Low Stock Products</h3>
+                    <div id="inventoryList">Loading inventory...</div>
+                </article>
+
+            </div>
+
+            <article class="content-card">
+                <h3>Popular Products</h3>
+                <div id="popularProducts">Loading products...</div>
+            </article>
+
+        </section>
+
+
+        <!-- ORDERS -->
+        <section class="page-section" id="orders">
+
+            <div class="page-heading">
+                <div>
+                    <h1>Orders Management</h1>
+                    <p>Create and manage coffee-house orders.</p>
+                </div>
+                <button class="primary-button" id="showOrderForm">
+                    <i class="fa-solid fa-plus"></i> New Order
+                </button>
+            </div>
+
+            <div class="content-card" id="orderFormContainer" hidden>
+                <h3>Create New Order</h3>
+
+                <form id="orderForm">
+
+                    <label for="orderCustomer">Customer</label>
+                    <select id="orderCustomer">
+                        <option value="">Walk-in Customer</option>
+                    </select>
+
+                    <div class="form-row">
+                        <div>
+                            <label for="orderProduct">Product</label>
+                            <select id="orderProduct" required>
+                                <option value="">Select product</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="orderQuantity">Quantity</label>
+                            <input type="number" id="orderQuantity"
+                                   min="1" value="1" required>
+                        </div>
+                    </div>
+
+                    <label for="orderPaymentMethod">Payment Method</label>
+                    <select id="orderPaymentMethod" required>
+                        <option value="cash">Cash</option>
+                        <option value="mobile_money">Mobile Money</option>
+                        <option value="bank_transfer">Bank Transfer</option>
+                    </select>
+
+                    <div id="orderCart"></div>
+
+                    <button type="button" id="addOrderItem" class="secondary-button">
+                        Add Product
+                    </button>
+
+                    <button type="submit" class="primary-button">
+                        Save Order
+                    </button>
+
+                </form>
+            </div>
+
+            <article class="content-card">
+                <h3>All Orders</h3>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Cashier</th>
+                                <th>Date</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTable"></tbody>
+                    </table>
+                </div>
+            </article>
+
+        </section>
+
+
+        <!-- PRODUCTS -->
+        <section class="page-section" id="products">
+
+            <div class="page-heading">
+                <div>
+                    <h1>Products Management</h1>
+                    <p>Manage coffee, drinks, food and product prices.</p>
+                </div>
+
+                <button class="primary-button" id="showProductForm">
+                    <i class="fa-solid fa-plus"></i> Add Product
+                </button>
+            </div>
+
+            <article class="content-card" id="productFormContainer" hidden>
+                <h3 id="productFormTitle">Add Product</h3>
+
+                <form id="productForm">
+                    <input type="hidden" id="productId">
+
+                    <label for="productName">Product Name</label>
+                    <input type="text" id="productName" required>
+
+                    <label for="productCategory">Category</label>
+                    <select id="productCategory" required>
+                        <option value="">Select category</option>
+                    </select>
+
+                    <div class="form-row">
+                        <div>
+                            <label for="productPrice">Price (ETB)</label>
+                            <input type="number" id="productPrice"
+                                   min="0" step="0.01" required>
+                        </div>
+
+                        <div>
+                            <label for="productStock">Stock Quantity</label>
+                            <input type="number" id="productStock"
+                                   min="0" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="primary-button">Save Product</button>
+                    <button type="button" class="secondary-button" id="cancelProductForm">
+                        Cancel
+                    </button>
+                </form>
+            </article>
+
+            <article class="content-card">
+                <input type="search" id="productSearch" placeholder="Search products...">
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Product</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>Availability</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsTable"></tbody>
+                    </table>
+                </div>
+            </article>
+
+        </section>
+
+
+        <!-- CATEGORIES -->
+        <section class="page-section" id="categories">
+
+            <div class="page-heading">
+                <div>
+                    <h1>Categories Management</h1>
+                    <p>Organize your products into categories.</p>
+                </div>
+                <button class="primary-button" id="showCategoryForm">
+                    <i class="fa-solid fa-plus"></i> Add Category
+                </button>
+            </div>
+
+            <article class="content-card" id="categoryFormContainer" hidden>
+                <h3 id="categoryFormTitle">Add Category</h3>
+
+                <form id="categoryForm">
+                    <input type="hidden" id="categoryId">
+
+                    <label for="categoryName">Category Name</label>
+                    <input type="text" id="categoryName" required>
+
+                    <label for="categoryDescription">Description</label>
+                    <textarea id="categoryDescription"></textarea>
+
+                    <button type="submit" class="primary-button">Save Category</button>
+                    <button type="button" class="secondary-button" id="cancelCategoryForm">
+                        Cancel
+                    </button>
+                </form>
+            </article>
+
+            <article class="content-card">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoriesTable"></tbody>
+                    </table>
+                </div>
+            </article>
+
+        </section>
+
+
+        <!-- CUSTOMERS -->
+        <section class="page-section" id="customers">
+
+            <div class="page-heading">
+                <div>
+                    <h1>Customers Management</h1>
+                    <p>Register and manage customer information.</p>
+                </div>
+                <button class="primary-button" id="showCustomerForm">
+                    <i class="fa-solid fa-plus"></i> Add Customer
+                </button>
+            </div>
+
+            <article class="content-card" id="customerFormContainer" hidden>
+                <h3 id="customerFormTitle">Register Customer</h3>
+
+                <form id="customerForm">
+                    <input type="hidden" id="customerId">
+
+                    <label for="customerName">Customer Name</label>
+                    <input type="text" id="customerName" required>
+
+                    <label for="customerPhone">Phone</label>
+                    <input type="tel" id="customerPhone">
+
+                    <label for="customerEmail">Email</label>
+                    <input type="email" id="customerEmail">
+
+                    <button type="submit" class="primary-button">Save Customer</button>
+                    <button type="button" class="secondary-button" id="cancelCustomerForm">
+                        Cancel
+                    </button>
+                </form>
+            </article>
+
+            <article class="content-card">
+                <input type="search" id="customerSearch" placeholder="Search customers...">
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Registered</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customersTable"></tbody>
+                    </table>
+                </div>
+            </article>
+
+        </section>
+
+
+        <!-- INVENTORY -->
+        <section class="page-section" id="inventory">
+
+            <div class="page-heading">
+                <div>
+                    <h1>Inventory Management</h1>
+                    <p>Monitor product stock and update quantities.</p>
+                </div>
+            </div>
+
+            <article class="content-card">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Current Stock</th>
+                                <th>Stock Status</th>
+                                <th>Update Stock</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fullInventoryTable"></tbody>
+                    </table>
+                </div>
+            </article>
+
+        </section>
+
+
+        <!-- PAYMENTS -->
+        <section class="page-section" id="payments">
+
+            <div class="page-heading">
+                <div>
+                    <h1>Payments Management</h1>
+                    <p>Review and manage payment transactions.</p>
+                </div>
+            </div>
+
+            <article class="content-card">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Payment ID</th>
+                                <th>Order ID</th>
+                                <th>Amount</th>
+                                <th>Method</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="paymentsTable"></tbody>
+                    </table>
+                </div>
+            </article>
+
+        </section>
+
+
+        <!-- REPORTS -->
+        <section class="page-section" id="reports">
+
+            <div class="page-heading">
+                <div>
+                    <h1>Business Reports</h1>
+                    <p>Review sales and order performance.</p>
+                </div>
+                <button class="secondary-button" id="refreshReports">
+                    <i class="fa-solid fa-rotate"></i> Refresh Reports
+                </button>
+            </div>
+
+            <article class="content-card">
+                <h3>Sales Summary</h3>
+                <div id="salesSummary"></div>
+            </article>
+
+            <article class="content-card">
+                <h3>Daily Sales</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Orders</th>
+                                <th>Sales (ETB)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dailySalesTable"></tbody>
+                    </table>
+                </div>
+            </article>
+
+        </section>
+
+
+        <!-- STAFF -->
+        <section class="page-section" id="staff">
+
+            <div class="page-heading">
+                <div>
+                    <h1>Staff Management</h1>
+                    <p>View staff accounts and their roles.</p>
+                </div>
+            </div>
+
+            <article class="content-card">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Full Name</th>
+                                <th>Username</th>
+                                <th>Role</th>
+                                <th>Account Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="staffTable"></tbody>
+                    </table>
+                </div>
+            </article>
+
+        </section>
+
+
+        <!-- SECURITY -->
+        <section class="page-section" id="security">
+
+            <div class="page-heading">
+                <div>
+                    <h1>System Security</h1>
+                    <p>Review the system security status.</p>
+                </div>
+            </div>
+
+            <article class="content-card">
+                <h3>Security Information</h3>
+                <div id="securityInformation">
+                    <p>Authentication and account protection must be configured on the backend.</p>
+                </div>
+            </article>
+
+        </section>
+
+
+        <!-- SETTINGS -->
+        <section class="page-section" id="settings">
+
+            <div class="page-heading">
+                <div>
+                    <h1>System Settings</h1>
+                    <p>Manage your local dashboard preferences.</p>
+                </div>
+            </div>
+
+            <article class="content-card">
+                <h3>Business Information</h3>
+
+                <form id="settingsForm">
+                    <label for="businessName">Business Name</label>
+                    <input type="text" id="businessName" value="BeanCraft Coffee House">
+
+                    <label for="currency">Currency</label>
+                    <select id="currency">
+                        <option value="ETB">ETB - Ethiopian Birr</option>
+                    </select>
+
+                    <button type="submit" class="primary-button">Save Settings</button>
+                </form>
+            </article>
+
+        </section>
+
+        <script src="script.js" defer></script>
+
+
+        <footer class="footer">
+            <p>BeanCraft Coffee House Management System &copy; <span id="currentYear"></span></p>
+        </footer>
+
+    </main>
+
+</div>
 
 </body>
-
 </html>

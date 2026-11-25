@@ -1,19 +1,29 @@
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 
-const db = mysql.createConnection({
+const db = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: '9215',
-    database: 'beancraft_coffee'
+    database: 'beancraft_coffee',
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
 });
 
-db.connect((err) => {
-    if (err) {
-        console.error('MySQL connection failed:', err.message);
-        return;
+// Test MySQL connection
+async function testConnection() {
+    try {
+        const connection = await db.getConnection();
+
+        console.log('MySQL connected successfully!');
+
+        connection.release();
+
+    } catch (error) {
+        console.error('MySQL connection failed:', error.message);
     }
+}
 
-    console.log('MySQL connected successfully!');
-});
+testConnection();
 
 module.exports = db;
