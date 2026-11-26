@@ -547,8 +547,7 @@ app.get("/api/orders", async (req, res) => {
              LEFT JOIN users u
                 ON o.user_id = u.user_id
              ORDER BY o.order_id DESC
-             LIMIT ?`,
-            [limit]
+             LIMIT ${limit}`
         );
 
         res.json(orders);
@@ -556,6 +555,7 @@ app.get("/api/orders", async (req, res) => {
         handleError(res, error, "Could not load orders.");
     }
 });
+
 
 app.get("/api/orders/:id", async (req, res) => {
     try {
