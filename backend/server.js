@@ -924,9 +924,17 @@ app.get("/api/reports/sales", async (req, res) => {
         `);
 
         const sales = await query(`
-            SELECT *
-            FROM sales_report
-            ORDER BY order_id DESC
+            SELECT
+                o.order_id,
+                COALESCE(c.customer_name, 'Walk-in Customer') AS customer_name,
+                o.order_date,
+                o.total_amount,
+                o.order_status
+            FROM orders o
+            LEFT JOIN customers c
+                ON o.customer_id = c.customer_id
+            WHERE o.order_status = 'completed'
+            ORDER BY o.order_id DESC
         `);
 
         res.json({
@@ -934,6 +942,7 @@ app.get("/api/reports/sales", async (req, res) => {
             totalOrders: Number(summary[0].totalOrders),
             sales
         });
+
     } catch (error) {
         handleError(res, error, "Could not load sales report.");
     }
