@@ -276,9 +276,11 @@ async function loadPopularProducts() {
 ========================================== */
 
 async function loadProducts() {
+    // Fetch products from the backend
     const result = await apiRequest("/products");
     products = getRecords(result);
 
+    // Display products in the Products table
     $("productsTable").innerHTML = products.length
         ? products.map(product => `
             <tr>
@@ -300,8 +302,31 @@ async function loadProducts() {
         `).join("")
         : `<tr><td colspan="7">No products found.</td></tr>`;
 
+    // Populate the New Order product dropdown
+    const orderProduct = $("orderProduct");
+
+    if (orderProduct) {
+        const availableProducts = products.filter(product =>
+            Number(product.is_available) === 1 &&
+            Number(product.stock_quantity) > 0
+        );
+
+        orderProduct.innerHTML = `
+            <option value="">Select product</option>
+            ${availableProducts.map(product => `
+                <option value="${product.product_id}">
+                    ${escapeHTML(product.product_name)} - ${money(product.price)}
+                </option>
+            `).join("")}
+        `;
+    }
+
+    // Preserve existing category functionality
     await populateCategorySelects();
 }
+
+
+
 
 function openProductForm(product = null) {
     $("productForm").reset();
